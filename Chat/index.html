@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Чат програма</title>
+    <style>
+        body {
+            background: #ffffff;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3  border-bottom shadow-sm" style="background: #61ffff">
+        <!-- <h5 class="my-0 mr-md-auto">Andrii</h5> -->
+        <img src="img/logo.png" alt="Логотип" height="50px" width="auto">
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" href="#">Головна</a>
+            <a class="p-2 text-dark" href="#">Про нас</a>
+            <a class="p-2 text-dark" href="#">Підтримка</a>
+        </nav>
+
+        <a class="btn btn-outline-primary" href="#">Регістрація</a>
+    </div>
+      <div class="container">
+          <div class="py-5 text-center">
+              <h2>Чат програма</h2>
+              <p class="lead">Вкажіть ваше імʼя та починайте переписку</p>
+          </div>
+          <div class="row">
+              <div class="col-6">
+                  <h3>Форма повідомлень</h3>
+                  <form id="messForm">
+                      <label for="name">Імʼя</label>
+                      <input type="text" name="name" id="name" placeholder="Введіть імʼя" class="form-control">
+                      <br>
+                      <label for="message">Повідомлення</label>
+                      <textarea name="message" id="message" class="form-control" placeholder="Введіть повідомлення"></textarea>
+                      <br>
+                      <input type="submit" value="Відправити" class="btn btn-danger">
+                  </form>
+              </div>
+              <div class="col-6">
+                <h3>Повідомлення</h3>
+                <div id="all_mess"></div>
+              </div>
+          </div>
+      </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let min = 1
+        let max = 6
+        let random = Math.floor(Math.random() * (max-min)) + min
+
+        let alertClass
+        switch (random){
+            case 1: 
+                alertClass = 'secondary';
+                break;
+            case 2: 
+                alertClass = 'danger';
+                break;
+            case 3: 
+                alertClass = 'success';
+                break;
+            case 4: 
+                alertClass = 'warning';
+                break;
+            case 5: 
+                alertClass = 'info';
+                break;
+            case 6: 
+                alertClass = 'light';
+                break;
+            
+        }
+
+        $(() => {
+            let socket = io.connect()
+            let $form = $("#messForm")
+            let $name = $("#name")
+            let $textarea = $("#message")
+            let $all_messages = $("#all_mess")
+
+            $form.submit((event) => {
+                event.preventDefault()
+                socket.emit('send mess', {mess: $textarea.val(), name: $name.val(), className: alertClass})
+                $textarea.val('')
+            })
+            socket.on('add mess', (data) => {
+                $all_messages.append("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess +  "</div")
+            })
+        })
+    </script>
+    
+
+</body>
+</html>

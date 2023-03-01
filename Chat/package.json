@@ -1,0 +1,20 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Andrii",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/sensible": "^5.2.0",
+    "express": "^4.17.3",
+    "fastify": "^3.27.4",
+    "fastify-formbody": "^5.2.0",
+    "fastify-socket.io": "^3.0.0",
+    "fastify-static": "^4.6.1",
+    "socket.io": "^4.4.1"
+  }
+}
